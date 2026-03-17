@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Translation Tool - Garment Production Files</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 PDF Translation Tool</h1>
+            <p class="subtitle">For Garment Production Files</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Drag & drop your PDF here</p>
+                        <p class="or-text">or</p>
+                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                            Browse Files
+                        </button>
+                        <input type="file" id="fileInput" accept=".pdf" hidden>
+                    </div>
+                </div>
+                <p class="file-name" id="fileName"></p>
+            </div>
+
+            <div class="action-section">
+                <button class="translate-btn" id="translateBtn" disabled>
+                    <span class="btn-text">Translate PDF</span>
+                    <span class="btn-loading" style="display: none;">Processing...</span>
+                </button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <div class="success-message">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span id="resultMessage"></span>
+                </div>
+                <a class="download-btn" id="downloadBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download Translated PDF
+                </a>
+            </div>
+
+            <div class="info-section">
+                <h3>How it works:</h3>
+                <ul>
+                    <li>🔍 Detects pages containing "comment" or "comments"</li>
+                    <li>🌐 Translates English to Simplified Chinese</li>
+                    <li>🔴 Adds Chinese translation in <span class="red-text">RED</span> beside original text</li>
+                    <li>📐 Preserves original layout, tables, and graphics</li>
+                    <li>📄 Keeps same page count</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>PDF Translation Tool for Garment Production Files</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
