@@ -53,6 +53,8 @@ function handleFile(file) {
 translateBtn.addEventListener('click', async () => {
     if (!selectedFile) return;
     
+    console.log('Starting translation for:', selectedFile.name);
+    
     // Show loading state
     const btnText = translateBtn.querySelector('.btn-text');
     const btnLoading = translateBtn.querySelector('.btn-loading');
@@ -60,16 +62,37 @@ translateBtn.addEventListener('click', async () => {
     btnLoading.style.display = 'inline';
     translateBtn.disabled = true;
     
+    // Set a timeout to show progress message
+    let progressMessage = null;
+    const progressTimeout = setTimeout(() => {
+        progressMessage = document.createElement('p');
+        progressMessage.textContent = 'Translating... This may take a moment for large files.';
+        progressMessage.style.color = '#666';
+        progressMessage.style.marginTop = '10px';
+        resultSection.parentNode.insertBefore(progressMessage, resultSection);
+    }, 3000);
+    
     try {
         const formData = new FormData();
         formData.append('file', selectedFile);
         
+        console.log('Sending request to /translate');
         const response = await fetch('/translate', {
             method: 'POST',
             body: formData
         });
         
+        clearTimeout(progressTimeout);
+        if (progressMessage) progressMessage.remove();
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.status);
+        }
+        
         const result = await response.json();
+        console.log('Result:', result);
         
         if (result.success) {
             // Show success message
@@ -79,11 +102,16 @@ translateBtn.addEventListener('click', async () => {
             // Setup download button
             downloadBtn.href = `/download/${result.output_file}`;
             downloadBtn.download = result.output_file;
+            
+            console.log('Download URL:', downloadBtn.href);
         } else {
             alert('Error: ' + result.detail);
         }
         
     } catch (error) {
+        clearTimeout(progressTimeout);
+        if (progressMessage) progressMessage.remove();
+        console.error('Error:', error);
         alert('An error occurred: ' + error.message);
     } finally {
         // Reset button state
