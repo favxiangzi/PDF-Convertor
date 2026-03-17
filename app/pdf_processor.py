@@ -16,7 +16,9 @@ class PDFProcessor:
     def __init__(self):
         self.translator = Translator()
         self.chinese_font = None
+        local_font = Path(__file__).parent / "fonts" / "NotoSansSC-Regular.ttf"
         font_paths = [
+            str(local_font),
             '/System/Library/Fonts/PingFang.ttc',
             '/System/Library/Fonts/STHeiti Light.ttc',
             '/System/Library/Fonts/STHeiti Medium.ttc',
@@ -25,10 +27,11 @@ class PDFProcessor:
         
         for fp in font_paths:
             try:
-                pdfmetrics.registerFont(TTFont('ChineseFont', fp))
-                self.chinese_font = 'ChineseFont'
-                print(f"Registered font: {fp}")
-                break
+                if Path(fp).exists():
+                    pdfmetrics.registerFont(TTFont('ChineseFont', fp))
+                    self.chinese_font = 'ChineseFont'
+                    print(f"Registered font: {fp}")
+                    break
             except Exception as e:
                 print(f"Failed to register {fp}: {e}")
                 continue
